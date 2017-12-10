@@ -14,5 +14,6 @@ public class CalculatorContract {
 
     public interface Presenter {
         void calculateExpression(String expression);
+        String parseExpression(String expressionToBeParsed, String toBeAppended);
     }
 }

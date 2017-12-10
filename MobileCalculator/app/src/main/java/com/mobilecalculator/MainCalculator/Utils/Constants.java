@@ -7,4 +7,5 @@ package com.mobilecalculator.MainCalculator.Utils;
 public class Constants {
 
     public static String DEFAULT_EXPRESSION = "0";
+    public static String CHAR_DOT = ".";
 }

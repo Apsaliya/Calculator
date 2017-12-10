@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mobilecalculator.MainCalculator.Utils.Constants;
+import com.mobilecalculator.MainCalculator.Utils.UtilFunctions;
 import com.mobilecalculator.R;
 import com.udojava.evalex.Expression;
 
@@ -18,8 +19,10 @@ import java.math.BigDecimal;
 
 public class MainActivity extends AppCompatActivity implements CalculatorContract.View {
 
+    private final String TAG = MainActivity.class.getSimpleName();
     private TextView mResult, mButtonCe, mButtonCl, mButtonCalculate;
     private Activity mActivity;
+    private boolean mIsInErrorMode = false, mIsResultDisplayed = false;
     private CalculatorPresenter mPresenter;
 
     @Override
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
         mButtonCe = findViewById(R.id.btn_ce);
         mButtonCl = findViewById(R.id.btn_cl);
         mButtonCalculate = findViewById(R.id.btn_equals);
+        setTextToResultView(null);
         initListeners();
     }
 
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
             @Override
             public void onClick(View v) {
                 removeLastCharAndSetExpression();
+                mIsResultDisplayed = false;
             }
         });
 
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
             @Override
             public void onClick(View v) {
                 setTextToResultView(null);
+                mIsResultDisplayed = false;
             }
         });
 
@@ -91,44 +97,70 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
     public void onExpressionButtonClicked(View view) {
         Object object = view.getTag();
         if (object instanceof String) {
+            if (mIsInErrorMode) {
+                setTextToResultView(null);
+            }
             setTextToResultView((String) object);
         }
+        mIsResultDisplayed = false;
     }
 
     @Override
     public void onExpressionCalculatedSuccessfully(String result) {
-        setTextToResultView(result, true);
+        Log.d(TAG, "is result displayed" + mIsResultDisplayed);
+        clearResultView();
+        setTextToResultView(result);
+        mIsResultDisplayed = true;
     }
 
     @Override
     public void onError() {
+        clearResultView();
         setTextToResultView(getString(R.string.general_error_text), true);
     }
 
     @Override
     public void onArithmeticException(String messageToBeDisplayed) {
-        setTextToResultView(messageToBeDisplayed);
+        clearResultView();
+        setTextToResultView(messageToBeDisplayed, true);
     }
 
     private void setTextToResultView(String expression, boolean isErrorText) {
         if (TextUtils.isEmpty(expression)) {
             mResult.setText(Constants.DEFAULT_EXPRESSION);
         } else {
-            mResult.append(expression);
+            CharSequence charSequence = mResult.getText();
+            Log.d(TAG, "" + mIsResultDisplayed);
+            Log.d(TAG, "" + UtilFunctions.isOperator(expression));
+            if (charSequence != null) {
+                if (mIsResultDisplayed && !UtilFunctions.isOperator(expression)) {
+                    mResult.setText(expression);
+                } else {
+                    String currentText = charSequence.toString();
+                    String newExpression = mPresenter.parseExpression(currentText, expression);
+                    Log.d(TAG, newExpression);
+                    mResult.setText(newExpression);
+                }
+            }
         }
 
         int colorResourceId;
+        int textSizeInSp;
         if (isErrorText) {
+            mIsInErrorMode = true;
             colorResourceId = ContextCompat.getColor(mActivity, R.color.error_color);
+            textSizeInSp = (int) getResources().getDimension(R.dimen.small_text_size);
         } else {
+            mIsInErrorMode = false;
             colorResourceId = ContextCompat.getColor(mActivity, R.color.text_color);
+            textSizeInSp = (int) getResources().getDimension(R.dimen.display_text_size);
         }
         mResult.setTextColor(colorResourceId);
+        mResult.setTextSize(textSizeInSp);
     }
 
 
-
     private void setTextToResultView(String expression) {
-       setTextToResultView(expression, false);
+        setTextToResultView(expression, false);
     }
 }

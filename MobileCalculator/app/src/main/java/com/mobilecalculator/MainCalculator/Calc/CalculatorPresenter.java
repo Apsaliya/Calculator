@@ -1,10 +1,13 @@
 package com.mobilecalculator.MainCalculator.Calc;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.mobilecalculator.MainCalculator.Utils.Constants;
 import com.udojava.evalex.Expression;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 /**
  * Created by ankit on 10/12/17.
@@ -23,13 +26,35 @@ public class CalculatorPresenter implements CalculatorContract.Presenter {
         try {
             Expression expression = new Expression(expressionString);
             BigDecimal decimal = expression.eval();
+            decimal = decimal.stripTrailingZeros();
             Log.d(TAG, decimal.toString());
-            mView.onExpressionCalculatedSuccessfully(decimal.toString());
+            DecimalFormat format = new DecimalFormat("#.##########");
+            mView.onExpressionCalculatedSuccessfully(String.valueOf(format.format(decimal.doubleValue())));
         } catch (ArithmeticException ae) {
+            ae.printStackTrace();
             mView.onArithmeticException(ae.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             mView.onError();
         }
+    }
+
+    @Override
+    public String parseExpression(@NonNull String expressionToBeParsed, String toBeAppended) {
+
+        Log.d(TAG, expressionToBeParsed);
+        if (!expressionToBeParsed.endsWith(Constants.CHAR_DOT)) {
+            if (expressionToBeParsed.startsWith(Constants.DEFAULT_EXPRESSION)) {
+                Log.d(TAG, expressionToBeParsed.substring(1, expressionToBeParsed.length()));
+
+                expressionToBeParsed = expressionToBeParsed.substring(1, expressionToBeParsed.length());
+            }
+        }
+
+        if (Constants.DEFAULT_EXPRESSION.equalsIgnoreCase(toBeAppended) && Constants.DEFAULT_EXPRESSION.equalsIgnoreCase(expressionToBeParsed)) {
+            return expressionToBeParsed;
+        }
+        return expressionToBeParsed + toBeAppended;
     }
 
     public void init(CalculatorContract.View view) {
