@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
             textSizeInSp = (int) getResources().getDimension(R.dimen.display_text_size);
         }
         mResult.setTextColor(colorResourceId);
-        //mResult.setTextSize(textSizeInSp);
+        mResult.setTextSize(textSizeInSp);
     }
 
 

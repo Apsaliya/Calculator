@@ -32,5 +32,4 @@ dependencies {
     androidTestCompile "com.linkedin.dexmaker:dexmaker-mockito:2.2.0"
 
     compile 'com.udojava:EvalEx:1.18'
-    compile 'me.grantland:autofittextview:0.2.+'
 }
