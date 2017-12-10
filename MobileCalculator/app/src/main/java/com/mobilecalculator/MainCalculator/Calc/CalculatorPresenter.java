@@ -20,7 +20,7 @@ public class CalculatorPresenter implements CalculatorContract.Presenter {
     @Override
     public void calculateExpression(String expressionString) {
         if (mView == null) {
-            throw new IllegalStateException("presenter.init() must be called before calling this function");
+            throw new IllegalStateException("presenter.attachView() must be called before calling this function");
         }
 
         try {
@@ -41,7 +41,6 @@ public class CalculatorPresenter implements CalculatorContract.Presenter {
 
     @Override
     public String parseExpression(@NonNull String expressionToBeParsed, String toBeAppended) {
-
         Log.d(TAG, expressionToBeParsed);
         if (!expressionToBeParsed.endsWith(Constants.CHAR_DOT)) {
             if (expressionToBeParsed.startsWith(Constants.DEFAULT_EXPRESSION)) {
@@ -57,7 +56,11 @@ public class CalculatorPresenter implements CalculatorContract.Presenter {
         return expressionToBeParsed + toBeAppended;
     }
 
-    public void init(CalculatorContract.View view) {
+    public CalculatorContract.View getView() {
+        return this.mView;
+    }
+
+    public void attachView(CalculatorContract.View view) {
         if (view == null) {
             throw new IllegalArgumentException("View can not be null. Cannot initialise presenter.");
         }

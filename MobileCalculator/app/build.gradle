@@ -26,5 +26,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    //Mockito
+    androidTestCompile 'org.mockito:mockito-core:2.7.17'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile "com.linkedin.dexmaker:dexmaker-mockito:2.2.0"
+
     compile 'com.udojava:EvalEx:1.18'
 }
