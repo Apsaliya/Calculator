@@ -7,10 +7,12 @@ package com.mobilecalculator.MainCalculator.Calc;
 public class CalculatorContract {
 
     public interface View {
-
+        void onExpressionCalculatedSuccessfully(String result);
+        void onArithmeticException(String messageToBeDisplayed);
+        void onError();
     }
 
     public interface Presenter {
-
+        void calculateExpression(String expression);
     }
 }

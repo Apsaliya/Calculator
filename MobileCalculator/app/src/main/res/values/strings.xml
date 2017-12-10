@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Mobile Calculator</string>
+    <string name="general_error_text">Error executing expression. Please Try again.</string>
 </resources>

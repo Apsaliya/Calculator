@@ -19,6 +19,7 @@
         android:paddingLeft="@dimen/activity_margin"
         android:paddingRight="@dimen/activity_margin"
         android:textSize="@dimen/display_text_size"
+        android:textColor="@color/text_color"
         tools:text="00"/>
 
     <LinearLayout
