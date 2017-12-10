@@ -13,11 +13,21 @@ import java.text.DecimalFormat;
 
 public class CalcRepository {
 
+    private final String TAG = CalcRepository.class.getSimpleName();
+
     public String getCalculatedStringFromExpression(String expressionString) {
         Expression expression = new Expression(expressionString);
         BigDecimal decimal = expression.eval();
         decimal = decimal.stripTrailingZeros();
         DecimalFormat format = new DecimalFormat("#.##########");
-        return String.valueOf(format.format(decimal.doubleValue()));
+        Log.d(TAG, "" + decimal.doubleValue());
+        double result = decimal.doubleValue();
+        String resultString;
+        if (result == (long) result) {
+            resultString = String.valueOf((long) result);
+        } else {
+            resultString = String.valueOf(result);
+        }
+        return resultString;
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,8 @@ import com.mobilecalculator.R;
 public class MainActivity extends AppCompatActivity implements CalculatorContract.View {
 
     private final String TAG = MainActivity.class.getSimpleName();
-    private TextView mResult, mButtonCe, mButtonCl, mButtonCalculate;
+    private AppCompatTextView mResult;
+    private TextView mButtonCe, mButtonCl, mButtonCalculate;
     private Activity mActivity;
     private boolean mIsInErrorMode = false, mIsResultDisplayed = false;
     private CalculatorPresenter mPresenter;
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
             textSizeInSp = (int) getResources().getDimension(R.dimen.display_text_size);
         }
         mResult.setTextColor(colorResourceId);
-        mResult.setTextSize(textSizeInSp);
+        //mResult.setTextSize(textSizeInSp);
     }
 
 
