@@ -16,6 +16,12 @@ import java.text.DecimalFormat;
 public class CalculatorPresenter implements CalculatorContract.Presenter {
     private final String TAG = CalculatorPresenter.class.getSimpleName();
     private CalculatorContract.View mView;
+    private CalcRepository mRepository;
+
+
+    public CalculatorPresenter(CalcRepository repository) {
+        this.mRepository = repository;
+    }
 
     @Override
     public void calculateExpression(String expressionString) {
@@ -24,12 +30,7 @@ public class CalculatorPresenter implements CalculatorContract.Presenter {
         }
 
         try {
-            Expression expression = new Expression(expressionString);
-            BigDecimal decimal = expression.eval();
-            decimal = decimal.stripTrailingZeros();
-            Log.d(TAG, decimal.toString());
-            DecimalFormat format = new DecimalFormat("#.##########");
-            mView.onExpressionCalculatedSuccessfully(String.valueOf(format.format(decimal.doubleValue())));
+            mView.onExpressionCalculatedSuccessfully(mRepository.getCalculatedStringFromExpression(expressionString));
         } catch (ArithmeticException ae) {
             ae.printStackTrace();
             mView.onArithmeticException(ae.getMessage());
@@ -40,12 +41,9 @@ public class CalculatorPresenter implements CalculatorContract.Presenter {
     }
 
     @Override
-    public String parseExpression(@NonNull String expressionToBeParsed, String toBeAppended) {
-        Log.d(TAG, expressionToBeParsed);
-        if (!expressionToBeParsed.endsWith(Constants.CHAR_DOT)) {
+    public String parseExpression(@NonNull String expressionToBeParsed, @NonNull String toBeAppended) {
+        if (!toBeAppended.endsWith(Constants.CHAR_DOT) && !expressionToBeParsed.contains(Constants.CHAR_DOT)) {
             if (expressionToBeParsed.startsWith(Constants.DEFAULT_EXPRESSION)) {
-                Log.d(TAG, expressionToBeParsed.substring(1, expressionToBeParsed.length()));
-
                 expressionToBeParsed = expressionToBeParsed.substring(1, expressionToBeParsed.length());
             }
         }

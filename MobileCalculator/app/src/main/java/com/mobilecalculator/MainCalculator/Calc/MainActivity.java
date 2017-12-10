@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
     }
 
     private void initPresenter() {
-        mPresenter = new CalculatorPresenter();
+        mPresenter = new CalculatorPresenter(new CalcRepository());
         mPresenter.attachView(this);
     }
 
@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
 
     @Override
     public void onExpressionCalculatedSuccessfully(String result) {
-        Log.d(TAG, "is result displayed" + mIsResultDisplayed);
         clearResultView();
         setTextToResultView(result);
         mIsResultDisplayed = true;
@@ -126,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
             mResult.setText(Constants.DEFAULT_EXPRESSION);
         } else {
             CharSequence charSequence = mResult.getText();
-            Log.d(TAG, "" + mIsResultDisplayed);
-            Log.d(TAG, "" + UtilFunctions.isOperator(expression));
             if (charSequence != null) {
                 if (mIsResultDisplayed && !UtilFunctions.isOperator(expression)) {
                     mResult.setText(expression);
