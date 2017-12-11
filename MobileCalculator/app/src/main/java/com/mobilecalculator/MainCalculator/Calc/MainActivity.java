@@ -1,6 +1,7 @@
 package com.mobilecalculator.MainCalculator.Calc;
 
 import android.app.Activity;
+import android.os.PersistableBundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.mobilecalculator.R;
 
 public class MainActivity extends AppCompatActivity implements CalculatorContract.View {
 
+    private final String KEY_INSTANCE_SAVE = "number";
     private final String TAG = MainActivity.class.getSimpleName();
     private AppCompatTextView mResult;
     private TextView mButtonCe, mButtonCl, mButtonCalculate;
@@ -28,7 +30,16 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        fillIfDataAvailableInBundle(savedInstanceState);
         initPresenter();
+    }
+
+    private void fillIfDataAvailableInBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(KEY_INSTANCE_SAVE)) {
+                mResult.setText(savedInstanceState.getCharSequence(KEY_INSTANCE_SAVE));
+            }
+        }
     }
 
     private void initViews() {
@@ -154,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
         mResult.setTextSize(textSizeInSp);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putCharSequence(KEY_INSTANCE_SAVE, mResult.getText());
+    }
 
     private void setTextToResultView(String expression) {
         setTextToResultView(expression, false);
