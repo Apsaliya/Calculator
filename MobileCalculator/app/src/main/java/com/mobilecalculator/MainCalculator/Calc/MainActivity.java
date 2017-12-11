@@ -18,6 +18,8 @@ import com.mobilecalculator.R;
 public class MainActivity extends AppCompatActivity implements CalculatorContract.View {
 
     private final String KEY_INSTANCE_SAVE = "number";
+    private final String KEY_INSTANCE_SAVE_ERROR = "isInErrorMode";
+    private final String KEY_INSTANCE_SAVE_RESULT = "isResultDisplayed";
     private final String TAG = MainActivity.class.getSimpleName();
     private AppCompatTextView mResult;
     private TextView mButtonCe, mButtonCl, mButtonCalculate;
@@ -38,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_INSTANCE_SAVE)) {
                 mResult.setText(savedInstanceState.getCharSequence(KEY_INSTANCE_SAVE));
+            }
+            if (savedInstanceState.containsKey(KEY_INSTANCE_SAVE_ERROR)) {
+                mIsInErrorMode = savedInstanceState.getBoolean(KEY_INSTANCE_SAVE_ERROR);
+            }
+            if (savedInstanceState.containsKey(KEY_INSTANCE_SAVE_RESULT)) {
+                mIsResultDisplayed = savedInstanceState.getBoolean(KEY_INSTANCE_SAVE_RESULT);
             }
         }
     }
@@ -169,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements CalculatorContrac
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putCharSequence(KEY_INSTANCE_SAVE, mResult.getText());
+        savedInstanceState.putBoolean(KEY_INSTANCE_SAVE_ERROR, mIsInErrorMode);
+        savedInstanceState.putBoolean(KEY_INSTANCE_SAVE_RESULT, mIsResultDisplayed);
     }
 
     private void setTextToResultView(String expression) {
